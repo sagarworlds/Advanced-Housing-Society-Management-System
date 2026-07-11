@@ -50,7 +50,7 @@ export class Login {
           if (res.role === 'SuperAdmin') {
             this.router.navigate(['/superadmin/dashboard']);
           } else if (res.role === 'SocietyAdmin') {
-            this.router.navigate(['/facility/admin']);
+            this.router.navigate(['/admin/dashboard']);
           } else {
             this.router.navigate(['/communication/notice-board']);
           }

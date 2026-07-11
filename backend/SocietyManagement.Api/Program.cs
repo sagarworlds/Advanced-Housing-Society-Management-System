@@ -8,6 +8,7 @@ using SocietyManagement.Infrastructure.Services;
 using SocietyManagement.Api.Hubs;
 using System.Text;
 using System;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ builder.Services.AddCors(options =>
 });
 
 // Register Services
-builder.Services.AddScoped<ITenantProvider, DummyTenantProvider>();
+builder.Services.AddScoped<ITenantProvider, HttpTenantProvider>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 // Configure Entity Framework Core with SQLite
@@ -66,7 +67,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "SocietyManagementApi",
         ValidAudience = builder.Configuration["Jwt:Audience"] ?? "SocietyManagementApiUsers",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "ThisIsASecretKeyForLocalDevelopmentOnly1234567890!"))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "ThisIsASecretKeyForLocalDevelopmentOnly1234567890!")),
+        // Ensure [Authorize(Roles="...")] reads from ClaimTypes.Role correctly
+        RoleClaimType = ClaimTypes.Role
     };
 });
 
@@ -108,8 +111,23 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-// Temporary dummy tenant provider until JWT auth is fully implemented
-public class DummyTenantProvider : ITenantProvider
+// HTTP context-based tenant provider resolving tenant ID from JWT claims
+public class HttpTenantProvider : ITenantProvider
 {
-    public Guid? GetTenantId() => null; // Returns null by default to signify super-admin or unauthenticated
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public HttpTenantProvider(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    public Guid? GetTenantId()
+    {
+        var tenantIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("TenantId")?.Value;
+        if (Guid.TryParse(tenantIdClaim, out var tenantId))
+        {
+            return tenantId;
+        }
+        return null;
+    }
 }

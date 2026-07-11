@@ -1,0 +1,62 @@
+<div class="admin-layout" [class.collapsed]="sidebarCollapsed()">
+  
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <!-- Logo / Brand -->
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <mat-icon>apartment</mat-icon>
+      </div>
+      <span class="brand-name">SocietyMS</span>
+    </div>
+
+    <!-- Navigation Items -->
+    <nav class="sidebar-nav">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        class="nav-item"
+        [class.active]="isActive(item.route)"
+        [matTooltip]="sidebarCollapsed() ? item.label : ''"
+        matTooltipPosition="right">
+        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span class="nav-label">{{ item.label }}</span>
+        <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
+      </a>
+    </nav>
+
+    <!-- Bottom: Logout -->
+    <div class="sidebar-footer">
+      <button class="nav-item logout-item" (click)="logout()"
+        [matTooltip]="sidebarCollapsed() ? 'Logout' : ''"
+        matTooltipPosition="right">
+        <mat-icon class="nav-icon">logout</mat-icon>
+        <span class="nav-label">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="main-area">
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <mat-icon>{{ sidebarCollapsed() ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+      <div class="header-center"></div>
+      <div class="header-right">
+        <div class="user-chip">
+          <div class="user-avatar">
+            <mat-icon>manage_accounts</mat-icon>
+          </div>
+          <span>Society Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

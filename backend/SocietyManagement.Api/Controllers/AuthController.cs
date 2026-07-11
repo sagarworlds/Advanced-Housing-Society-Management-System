@@ -36,9 +36,13 @@ public class AuthController : ControllerBase
         if (!result.Succeeded) return Unauthorized("Invalid credentials.");
 
         var roles = await _userManager.GetRolesAsync(user);
-        
-        // Note: Real implementation will map TenantId from the custom user profile
-        Guid? tenantId = null; 
+        var claims = await _userManager.GetClaimsAsync(user);
+        var tenantIdClaim = claims.FirstOrDefault(c => c.Type == "TenantId")?.Value;
+        Guid? tenantId = null;
+        if (Guid.TryParse(tenantIdClaim, out var parsedId))
+        {
+            tenantId = parsedId;
+        }
 
         var token = _jwtTokenService.GenerateToken(user, roles, tenantId);
 

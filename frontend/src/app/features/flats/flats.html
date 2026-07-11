@@ -1,0 +1,192 @@
+<div class="flats-container">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Flats & Owner Directory</h1>
+      <p>Manage all flat units and their owner / occupant details</p>
+    </div>
+    <button class="btn-primary" (click)="openAddForm()">
+      <mat-icon>add</mat-icon> Add Flat
+    </button>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="stats-row">
+    <div class="stat-pill">
+      <mat-icon>apartment</mat-icon>
+      <span>{{ flats.length }} Total Units</span>
+    </div>
+    <div class="stat-pill green">
+      <mat-icon>person</mat-icon>
+      <span>{{ ownerCount }} Owner-occupied</span>
+    </div>
+    <div class="stat-pill blue">
+      <mat-icon>key</mat-icon>
+      <span>{{ tenantCount }} Tenant-occupied</span>
+    </div>
+    <div class="stat-pill red">
+      <mat-icon>lock_open</mat-icon>
+      <span>{{ vacantCount }} Vacant</span>
+    </div>
+  </div>
+
+  <!-- Credentials Banner (shown when a resident user is auto-created) -->
+  <div class="credentials-banner" *ngIf="createdCredentials">
+    <div class="cred-icon">🎉</div>
+    <div class="cred-body">
+      <p class="cred-title">Resident account created for Flat <strong>{{ createdCredentials.flatLabel }}</strong></p>
+      <div class="cred-row">
+        <span class="cred-label">Username</span>
+        <code class="cred-value">{{ createdCredentials.username }}</code>
+      </div>
+      <div class="cred-row">
+        <span class="cred-label">Password</span>
+        <code class="cred-value">{{ createdCredentials.password }}</code>
+      </div>
+      <p class="cred-hint">Share these credentials with the resident. They can change the password after first login.</p>
+    </div>
+    <button class="cred-dismiss" (click)="createdCredentials = null">✕</button>
+  </div>
+
+  <!-- Loader -->
+  <div class="loading-box" *ngIf="loading && !showForm">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Flat Cards Grid -->
+  <div class="flats-grid" *ngIf="!loading || showForm">
+    <div class="flat-card" *ngFor="let flat of flats">
+      <div class="card-top">
+        <div class="flat-id">
+          <span class="block-badge">{{ flat.block }}</span>
+          <span class="flat-num">{{ flat.flatNumber }}</span>
+          <span class="flat-type-tag">{{ flat.flatType }}</span>
+        </div>
+        <span class="occupancy-badge" [class]="occupancyBadge(flat.occupancyStatus)">
+          {{ flat.occupancyStatus }}
+        </span>
+      </div>
+
+      <div class="owner-info">
+        <div class="owner-avatar">{{ flat.ownerName.charAt(0).toUpperCase() }}</div>
+        <div>
+          <p class="owner-name">{{ flat.ownerName }}</p>
+          <p class="owner-phone">{{ flat.ownerPhone || '—' }}</p>
+          <p class="owner-email">{{ flat.ownerEmail || '—' }}</p>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="meta-pill">
+          <mat-icon>layers</mat-icon> Floor {{ flat.floor }}
+        </div>
+        <div class="meta-pill">
+          <mat-icon>square_foot</mat-icon> {{ flat.maintenanceAreaSqFt }} sq ft
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="action-btn edit" (click)="openEditForm(flat)">
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button class="action-btn delete" (click)="deleteFlat(flat)">
+          <mat-icon>delete_outline</mat-icon> Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="flats.length === 0">
+      <mat-icon>domain_add</mat-icon>
+      <p>No flats added yet. Click <strong>Add Flat</strong> to get started.</p>
+    </div>
+  </div>
+
+  <!-- Slide-in Form Panel -->
+  <div class="form-overlay" *ngIf="showForm" (click)="cancelForm()"></div>
+  <div class="form-drawer" *ngIf="showForm">
+    <div class="drawer-header">
+      <h2>{{ editingId ? '✏️ Edit Flat' : '🏠 Add New Flat' }}</h2>
+      <button class="close-btn" (click)="cancelForm()"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <form [formGroup]="flatForm" (ngSubmit)="onSubmit()" class="drawer-form">
+
+      <p class="section-label">Unit Details</p>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label>Block / Wing</label>
+          <input formControlName="block" placeholder="e.g. A" type="text">
+          <span class="field-error" *ngIf="flatForm.get('block')?.touched && flatForm.get('block')?.invalid">Required</span>
+        </div>
+        <div class="field-group">
+          <label>Flat Number</label>
+          <input formControlName="flatNumber" placeholder="e.g. 101" type="text">
+          <span class="field-error" *ngIf="flatForm.get('flatNumber')?.touched && flatForm.get('flatNumber')?.invalid">Required</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label>Floor</label>
+          <input formControlName="floor" placeholder="0" type="number" min="0">
+        </div>
+        <div class="field-group">
+          <label>Flat Type</label>
+          <div class="select-wrapper">
+            <select formControlName="flatType">
+              <option *ngFor="let t of flatTypes" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Maintenance Area (sq ft)</label>
+        <input formControlName="maintenanceAreaSqFt" placeholder="e.g. 850" type="number" min="1">
+        <span class="field-error" *ngIf="flatForm.get('maintenanceAreaSqFt')?.touched && flatForm.get('maintenanceAreaSqFt')?.invalid">Must be at least 1</span>
+      </div>
+
+      <p class="section-label">Owner / Occupant</p>
+
+      <div class="field-group">
+        <label>Owner Name</label>
+        <input formControlName="ownerName" placeholder="Full name of owner" type="text">
+        <span class="field-error" *ngIf="flatForm.get('ownerName')?.touched && flatForm.get('ownerName')?.invalid">Required</span>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label>Phone</label>
+          <input formControlName="ownerPhone" placeholder="+91 98765..." type="tel">
+          <span class="field-error" *ngIf="flatForm.get('ownerPhone')?.touched && flatForm.get('ownerPhone')?.invalid">Required</span>
+        </div>
+        <div class="field-group">
+          <label>Email</label>
+          <input formControlName="ownerEmail" placeholder="owner@email.com" type="email">
+          <span class="field-error" *ngIf="flatForm.get('ownerEmail')?.touched && flatForm.get('ownerEmail')?.invalid">Valid email required</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Occupancy Status</label>
+        <div class="select-wrapper">
+          <select formControlName="occupancyStatus">
+            <option *ngFor="let opt of occupancyOptions" [value]="opt">{{ opt }}</option>
+          </select>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="drawer-actions">
+      <button type="button" class="btn-cancel" (click)="cancelForm()">Cancel</button>
+      <button type="submit" class="btn-save" [disabled]="flatForm.invalid || loading" (click)="onSubmit()">
+        {{ loading ? 'Saving...' : (editingId ? 'Update Flat' : 'Add Flat') }}
+      </button>
+    </div>
+  </div>
+
+</div>

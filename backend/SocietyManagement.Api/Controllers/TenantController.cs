@@ -66,6 +66,7 @@ public class TenantController : ControllerBase
         }
 
         await _userManager.AddToRoleAsync(adminUser, "SocietyAdmin");
+        await _userManager.AddClaimAsync(adminUser, new System.Security.Claims.Claim("TenantId", tenant.Id.ToString()));
 
         return Ok(new { Message = "Society onboarded successfully", TenantId = tenant.Id });
     }

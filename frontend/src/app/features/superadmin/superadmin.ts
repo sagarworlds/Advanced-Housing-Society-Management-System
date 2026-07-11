@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -30,6 +30,7 @@ export class SuperAdminDashboard implements OnInit {
   private saService = inject(SuperAdminService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   societies: Society[] = [];
   modules: ModuleInfo[] = [];
@@ -52,12 +53,18 @@ export class SuperAdminDashboard implements OnInit {
     this.loading = true;
     this.saService.getAvailableModules().subscribe({
       next: (mods) => {
-        this.modules = mods;
-        this.loadSocieties();
+        try {
+          this.modules = mods || [];
+          this.loadSocieties();
+        } catch (e) {
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
       },
-      error: () => {
+      error: (err) => {
         this.snackBar.open('Error loading modules.', 'Close', { duration: 3000 });
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -65,29 +72,43 @@ export class SuperAdminDashboard implements OnInit {
   loadSocieties() {
     this.saService.getSocieties().subscribe({
       next: (data) => {
-        this.societies = data;
-        this.calculateKPIs();
-        this.loading = false;
+        try {
+          this.societies = data || [];
+          this.calculateKPIs();
+        } catch (e) {
+        } finally {
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
       },
-      error: () => {
+      error: (err) => {
         this.snackBar.open('Error loading societies. Make sure you are logged in as SuperAdmin.', 'Close', { duration: 3000 });
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   calculateKPIs() {
+    if (!Array.isArray(this.societies)) {
+      this.totalSocieties = 0;
+      this.activeSocieties = 0;
+      this.estimatedRevenue = 0;
+      return;
+    }
+
     this.totalSocieties = this.societies.length;
-    this.activeSocieties = this.societies.filter(s => s.isActive).length;
+    this.activeSocieties = this.societies.filter(s => s && s.isActive).length;
     
-    // Calculate estimate based on module prices of active societies
     let total = 0;
+    const modulesList = Array.isArray(this.modules) ? this.modules : [];
+
     this.societies.forEach(soc => {
-      if (soc.isActive && soc.selectedModuleIds) {
+      if (soc && soc.isActive && Array.isArray(soc.selectedModuleIds)) {
         soc.selectedModuleIds.forEach(modName => {
-          const mod = this.modules.find(m => m.name === modName);
+          const mod = modulesList.find(m => m && m.name === modName);
           if (mod) {
-            total += Number(mod.monthlyPrice);
+            total += Number(mod.monthlyPrice || 0);
           }
         });
       }
@@ -100,6 +121,7 @@ export class SuperAdminDashboard implements OnInit {
       next: (res) => {
         society.isActive = res.isActive;
         this.calculateKPIs();
+        this.cdr.detectChanges();
         this.snackBar.open(res.message, 'Close', { duration: 3000 });
       },
       error: () => {
@@ -145,10 +167,12 @@ export class SuperAdminDashboard implements OnInit {
         this.calculateKPIs();
         this.snackBar.open(res.message, 'Close', { duration: 3000 });
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.snackBar.open('Failed to update society modules.', 'Close', { duration: 3000 });
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

@@ -1,17 +1,29 @@
-using SocietyManagement.Core.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 
-namespace SocietyManagement.Core.Entities;
+namespace SocietyManagement.Core.DTOs;
 
-public class Flat : TenantEntity
+public class FlatRequest
 {
+    [Required]
     public string Block { get; set; } = string.Empty;
+
+    [Required]
     public string FlatNumber { get; set; } = string.Empty;
+
     public int Floor { get; set; }
-    public string FlatType { get; set; } = string.Empty;  // e.g. "1BHK", "2BHK", "3BHK"
+
+    public string FlatType { get; set; } = "2BHK";
+
+    [Required]
     public string OwnerName { get; set; } = string.Empty;
+
     public string OwnerPhone { get; set; } = string.Empty;
+
+    [EmailAddress]
     public string OwnerEmail { get; set; } = string.Empty;
-    public string OccupancyStatus { get; set; } = "Owner";  // "Owner" | "Tenant" | "Vacant"
-    public string? ResidentUserId { get; set; }
+
+    public string OccupancyStatus { get; set; } = "Owner";
+
+    [Range(1, 100000)]
     public decimal MaintenanceAreaSqFt { get; set; }
 }

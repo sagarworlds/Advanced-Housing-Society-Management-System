@@ -58,18 +58,17 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
         // Ensure unique module names
         builder.Entity<Module>().HasIndex(m => m.Name).IsUnique();
 
-        // Query Filters
-        var tenantId = _tenantProvider.GetTenantId();
-        builder.Entity<Flat>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<Invoice>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<Visitor>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<Ticket>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<Facility>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<FacilityBooking>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<Notice>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<Poll>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<PollOption>().HasQueryFilter(e => e.TenantId == tenantId);
-        builder.Entity<PollVote>().HasQueryFilter(e => e.TenantId == tenantId);
+        // Query Filters (dynamic per-request evaluation, bypasses if tenant ID is null / SuperAdmin)
+        builder.Entity<Flat>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<Invoice>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<Visitor>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<Ticket>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<Facility>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<FacilityBooking>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<Notice>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<Poll>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<PollOption>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
+        builder.Entity<PollVote>().HasQueryFilter(e => _tenantProvider.GetTenantId() == null || e.TenantId == _tenantProvider.GetTenantId());
 
         // Configure Invoice -> Flat relationship
         builder.Entity<Invoice>()
