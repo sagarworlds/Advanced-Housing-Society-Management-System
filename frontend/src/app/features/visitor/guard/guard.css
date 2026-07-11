@@ -1,0 +1,44 @@
+.guard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.split-layout {
+  display: flex;
+  gap: 24px;
+}
+.form-card {
+  flex: 1;
+}
+.list-card {
+  flex: 1;
+}
+.visitor-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+.submit-btn {
+  padding: 8px 0;
+  font-size: 16px;
+}
+.status-0 { color: #f57c00; } /* Pending */
+.status-1 { color: #388e3c; } /* Approved */
+.status-2 { color: #d32f2f; } /* Denied */
+.status-3 { color: #1976d2; } /* Entered */
+.status-4 { color: #757575; } /* Exited */
+
+.empty-state {
+  padding: 16px;
+  text-align: center;
+  color: #757575;
+}
+@media (max-width: 768px) {
+  .split-layout {
+    flex-direction: column;
+  }
+}

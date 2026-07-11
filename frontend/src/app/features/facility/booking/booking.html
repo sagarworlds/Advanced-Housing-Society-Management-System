@@ -1,0 +1,48 @@
+<div class="booking-container">
+  <h2>Facility & Amenity Booking</h2>
+  
+  <div class="controls-row">
+    <mat-form-field appearance="outline" class="facility-select">
+      <mat-label>Select Facility</mat-label>
+      <mat-select [(ngModel)]="selectedFacilityId" (selectionChange)="onFacilityChange()">
+        <mat-option *ngFor="let f of facilities" [value]="f.id">
+          {{f.name}} (₹{{f.hourlyRate}}/hr)
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <div class="date-controls">
+      <button mat-icon-button (click)="onDateChange(-1)"><mat-icon>chevron_left</mat-icon></button>
+      <div class="current-date">{{selectedDate | date:'fullDate'}}</div>
+      <button mat-icon-button (click)="onDateChange(1)"><mat-icon>chevron_right</mat-icon></button>
+    </div>
+  </div>
+
+  <mat-card class="calendar-card">
+    <mat-card-header>
+      <mat-card-title>Available Time Slots</mat-card-title>
+      <mat-card-subtitle>Tap an available slot to book immediately.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="timeslot-grid">
+        <div *ngFor="let hour of timeSlots" 
+             class="timeslot" 
+             [ngClass]="getSlotStatus(hour)"
+             (click)="bookSlot(hour)">
+          
+          <div class="time-label">{{formatHour(hour)}}</div>
+          
+          <div class="status-label" *ngIf="getSlotStatus(hour) === 'available'">
+            Available <mat-icon>event_available</mat-icon>
+          </div>
+          <div class="status-label" *ngIf="getSlotStatus(hour) === 'booked'">
+            Booked <mat-icon>event_busy</mat-icon>
+          </div>
+          <div class="status-label" *ngIf="getSlotStatus(hour) === 'my-booking'">
+            My Booking <mat-icon>check_circle</mat-icon>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

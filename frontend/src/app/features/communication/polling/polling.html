@@ -1,0 +1,49 @@
+<div class="polling-container">
+  <h2>Society Polls</h2>
+  
+  <div class="polls-grid">
+    <mat-card *ngFor="let poll of polls" class="poll-card">
+      <mat-card-header>
+        <mat-card-title>{{poll.question}}</mat-card-title>
+        <mat-card-subtitle *ngIf="!poll.isClosed">Closes on {{poll.expiryDate | date:'mediumDate'}}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="poll.isClosed" class="closed-badge">Closed</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <!-- Voting View (Mock condition: if user hasn't voted yet, we'd normally check user state, but for this demo we'll show results after they click vote which reloads the total) -->
+        <mat-radio-group [(ngModel)]="selectedOptions[poll.id]" class="poll-options">
+          <div *ngFor="let option of poll.options" class="option-container">
+            <mat-radio-button [value]="option.id" [disabled]="poll.isClosed">
+              {{option.text}}
+            </mat-radio-button>
+            
+            <!-- Result Bar -->
+            <div class="result-bar-container" *ngIf="getTotalVotes(poll) > 0">
+              <mat-progress-bar 
+                mode="determinate" 
+                [value]="getPercentage(poll, option.voteCount)">
+              </mat-progress-bar>
+              <span class="percentage">{{getPercentage(poll, option.voteCount)}}% ({{option.voteCount}} votes)</span>
+            </div>
+          </div>
+        </mat-radio-group>
+        
+        <div class="total-votes" *ngIf="getTotalVotes(poll) > 0">
+          Total Votes: {{getTotalVotes(poll)}}
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions align="end" *ngIf="!poll.isClosed">
+        <button mat-flat-button color="primary" 
+                [disabled]="!selectedOptions[poll.id]"
+                (click)="castVote(poll.id)">
+          Cast Vote
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    
+    <div *ngIf="polls.length === 0" class="empty-state">
+      <p>No active polls.</p>
+    </div>
+  </div>
+</div>

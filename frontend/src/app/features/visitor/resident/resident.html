@@ -1,0 +1,33 @@
+<div class="resident-container">
+  <h2>Resident Dashboard</h2>
+  <p>Monitoring Gate Alerts for Flat: <strong>A-101</strong></p>
+
+  <div *ngIf="pendingVisitors.length === 0" class="empty-state">
+    <mat-icon class="large-icon">security</mat-icon>
+    <p>No visitors at the gate currently.</p>
+  </div>
+
+  <div class="visitor-cards">
+    <mat-card *ngFor="let visitor of pendingVisitors" class="visitor-card">
+      <mat-card-header>
+        <div mat-card-avatar class="visitor-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <mat-card-title>{{visitor.name}}</mat-card-title>
+        <mat-card-subtitle>{{visitor.purpose}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Phone:</strong> {{visitor.phoneNumber}}</p>
+        <p><strong>Arrived at:</strong> {{visitor.arrivalTime | date:'shortTime'}}</p>
+      </mat-card-content>
+      <mat-card-actions class="actions">
+        <button mat-flat-button color="warn" (click)="respondToVisitor(visitor, 2)">
+          <mat-icon>close</mat-icon> Deny
+        </button>
+        <button mat-flat-button color="primary" (click)="respondToVisitor(visitor, 1)">
+          <mat-icon>check</mat-icon> Approve
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

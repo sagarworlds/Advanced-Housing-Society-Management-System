@@ -1,0 +1,72 @@
+.helpdesk-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.split-layout {
+  display: flex;
+  gap: 24px;
+}
+.form-card {
+  flex: 1.5;
+}
+.list-card {
+  flex: 1;
+}
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+.row {
+  display: flex;
+  gap: 16px;
+}
+.half-width {
+  flex: 1;
+}
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+.submit-btn {
+  padding: 8px 0;
+  font-size: 16px;
+  margin-top: 16px;
+}
+.file-upload-section {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+.file-upload-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.status-0 { background: #ffebee; color: #c62828; } /* Open */
+.status-1 { background: #e3f2fd; color: #1565c0; } /* Assigned */
+.status-2 { background: #fff3e0; color: #ef6c00; } /* In Progress */
+.status-3 { background: #e8f5e9; color: #2e7d32; } /* Resolved */
+.status-4 { background: #eeeeee; color: #616161; } /* Closed */
+.ticket-item {
+  border-bottom: 1px solid #f0f0f0;
+}
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: #757575;
+}
+@media (max-width: 768px) {
+  .split-layout {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,35 @@
+<div class="notice-container">
+  <h2>Society Notice Board</h2>
+  
+  <div class="notices-grid">
+    <mat-card *ngFor="let notice of notices" class="notice-card" [class.urgent]="notice.isUrgent">
+      <mat-card-header>
+        <div mat-card-avatar class="notice-avatar">
+          <mat-icon *ngIf="notice.isUrgent" color="warn">campaign</mat-icon>
+          <mat-icon *ngIf="!notice.isUrgent" color="primary">description</mat-icon>
+        </div>
+        <mat-card-title>{{notice.title}}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-chip-set>
+            <mat-chip *ngIf="notice.isUrgent" color="warn" highlighted>URGENT</mat-chip>
+            <mat-chip *ngIf="!notice.isUrgent">General</mat-chip>
+          </mat-chip-set>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="notice-content">{{notice.content}}</p>
+      </mat-card-content>
+      <mat-card-footer>
+        <div class="footer-meta">
+           <span>Posted: {{notice.createdAt | date:'mediumDate'}}</span>
+           <span *ngIf="notice.expiryDate">Expires: {{notice.expiryDate | date:'mediumDate'}}</span>
+        </div>
+      </mat-card-footer>
+    </mat-card>
+    
+    <div *ngIf="notices.length === 0" class="empty-state">
+      <mat-icon>done_all</mat-icon>
+      <p>No active notices right now.</p>
+    </div>
+  </div>
+</div>

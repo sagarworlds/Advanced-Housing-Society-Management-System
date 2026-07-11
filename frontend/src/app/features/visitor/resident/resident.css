@@ -1,0 +1,47 @@
+.resident-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  color: #757575;
+  background: #f5f5f5;
+  border-radius: 12px;
+  margin-top: 24px;
+}
+
+.large-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+.visitor-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.visitor-card {
+  border-left: 4px solid #ef6c00; /* Alert Color */
+}
+
+.visitor-avatar {
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-right: 16px;
+}

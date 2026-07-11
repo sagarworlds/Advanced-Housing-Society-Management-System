@@ -1,0 +1,58 @@
+<div class="guard-container">
+  <h2>Security Guard Dashboard</h2>
+  <div class="split-layout">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Log New Visitor</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="visitorForm" (ngSubmit)="onSubmit()" class="visitor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Visitor Name</mat-label>
+            <input matInput formControlName="name" placeholder="John Doe">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phoneNumber" placeholder="9876543210">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Flat</mat-label>
+            <mat-select formControlName="flatId">
+              <mat-option *ngFor="let flat of flats" [value]="flat.id">
+                {{flat.block}}-{{flat.flatNumber}} ({{flat.ownerName}})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Purpose of Visit</mat-label>
+            <mat-select formControlName="purpose">
+              <mat-option value="Delivery">Delivery</mat-option>
+              <mat-option value="Guest">Guest</mat-option>
+              <mat-option value="Maintenance">Maintenance</mat-option>
+              <mat-option value="Other">Other</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <button mat-flat-button color="primary" type="submit" [disabled]="visitorForm.invalid || loading" class="full-width submit-btn">
+            {{ loading ? 'Logging...' : 'Log & Notify Resident' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="list-card">
+      <mat-card-header>
+        <mat-card-title>Recent Visitors</mat-card-title>
+      </mat-card-header>
+      <mat-list>
+        <mat-list-item *ngFor="let visitor of recentVisitors">
+          <mat-icon matListItemIcon>person</mat-icon>
+          <div matListItemTitle>{{visitor.name}} ({{visitor.purpose}})</div>
+          <div matListItemLine>To Flat: {{visitor.flat?.block}}-{{visitor.flat?.flatNumber}}</div>
+          <div matListItemLine>Status: <strong [ngClass]="'status-' + visitor.status">{{getStatusText(visitor.status)}}</strong></div>
+        </mat-list-item>
+        <div *ngIf="recentVisitors.length === 0" class="empty-state">No recent visitors</div>
+      </mat-list>
+    </mat-card>
+  </div>
+</div>

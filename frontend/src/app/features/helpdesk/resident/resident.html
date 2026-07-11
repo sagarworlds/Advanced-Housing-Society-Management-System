@@ -1,0 +1,90 @@
+<div class="helpdesk-container">
+  <h2>Helpdesk & Complaints</h2>
+  <div class="split-layout">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Raise a New Ticket</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" class="ticket-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" placeholder="E.g., Leaking pipe in bathroom" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="3"
+              placeholder="Please describe the issue..."
+            ></textarea>
+          </mat-form-field>
+
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="category">
+                <mat-option [value]="0">Plumbing</mat-option>
+                <mat-option [value]="1">Electrical</mat-option>
+                <mat-option [value]="2">Cleaning</mat-option>
+                <mat-option [value]="3">Security</mat-option>
+                <mat-option [value]="4">Other</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Priority</mat-label>
+              <mat-select formControlName="priority">
+                <mat-option [value]="0">Low</mat-option>
+                <mat-option [value]="1">Medium</mat-option>
+                <mat-option [value]="2">High</mat-option>
+                <mat-option [value]="3">Critical</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="file-upload-section">
+            <label>Attach Photo (Optional):</label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+          </div>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="ticketForm.invalid || loading"
+            class="full-width submit-btn"
+          >
+            {{ loading ? 'Submitting...' : 'Submit Ticket' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="list-card">
+      <mat-card-header>
+        <mat-card-title>My Tickets</mat-card-title>
+      </mat-card-header>
+      <mat-list>
+        <mat-list-item *ngFor="let ticket of tickets" class="ticket-item">
+          <mat-icon matListItemIcon>support_agent</mat-icon>
+          <div matListItemTitle>{{ ticket.title }}</div>
+          <div matListItemLine>
+            Status:
+            <strong class="status-badge status-{{ ticket.status }}">{{
+              getStatusText(ticket.status)
+            }}</strong>
+          </div>
+          <div matListItemLine *ngIf="ticket.attachmentUrl">
+            <a [href]="'http://localhost:5053' + ticket.attachmentUrl" target="_blank"
+              >View Attachment</a
+            >
+          </div>
+        </mat-list-item>
+        <div *ngIf="tickets.length === 0" class="empty-state">No tickets raised yet.</div>
+      </mat-list>
+    </mat-card>
+  </div>
+</div>

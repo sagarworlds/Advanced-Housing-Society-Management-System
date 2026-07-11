@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SocietyManagement.Api/SocietyManagement.Api.csproj" />
+  <Project Path="SocietyManagement.Core/SocietyManagement.Core.csproj" />
+  <Project Path="SocietyManagement.Infrastructure/SocietyManagement.Infrastructure.csproj" />
+</Solution>

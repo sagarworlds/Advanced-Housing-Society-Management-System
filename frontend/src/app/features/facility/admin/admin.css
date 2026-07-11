@@ -1,0 +1,33 @@
+.admin-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.tab-content {
+  padding-top: 24px;
+}
+.booking-item {
+  border-bottom: 1px solid #eee;
+}
+.status-0 { color: #f57c00; } /* Pending */
+.status-1 { color: #388e3c; } /* Confirmed */
+.status-2 { color: #d32f2f; } /* Cancelled */
+.status-3 { color: #757575; } /* Completed */
+
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.facility-card {
+  display: flex;
+  flex-direction: column;
+}
+.facility-card mat-card-content {
+  flex-grow: 1;
+}
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: #757575;
+}

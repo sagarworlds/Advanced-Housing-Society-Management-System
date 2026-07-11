@@ -1,0 +1,47 @@
+<div class="admin-container">
+  <h2>Helpdesk Ticket Management</h2>
+
+  <div class="ticket-grid">
+    <mat-card *ngFor="let ticket of tickets" class="ticket-card status-{{ ticket.status }}">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon [color]="ticket.priority === 3 ? 'warn' : 'primary'">assignment</mat-icon>
+        </div>
+        <mat-card-title>{{ ticket.title }}</mat-card-title>
+        <mat-card-subtitle
+          >{{ getCategoryText(ticket.category) }} • Priority:
+          {{ getPriorityText(ticket.priority) }}</mat-card-subtitle
+        >
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <p>{{ ticket.description }}</p>
+        <div *ngIf="ticket.attachmentUrl" class="attachment-link">
+          <mat-icon>attach_file</mat-icon>
+          <a [href]="'https://localhost:5053' + ticket.attachmentUrl" target="_blank">View Photo</a>
+        </div>
+        <div class="status-indicator">
+          <strong>Status:</strong> <span class="badge">{{ getStatusText(ticket.status) }}</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button [matMenuTriggerFor]="menu">
+          Update Status <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="updateStatus(ticket, 0)">Mark as Open</button>
+          <button mat-menu-item (click)="updateStatus(ticket, 1)">Assign to Staff</button>
+          <button mat-menu-item (click)="updateStatus(ticket, 2)">In Progress</button>
+          <button mat-menu-item (click)="updateStatus(ticket, 3)">Resolve</button>
+          <button mat-menu-item (click)="updateStatus(ticket, 4)">Close Ticket</button>
+        </mat-menu>
+      </mat-card-actions>
+    </mat-card>
+
+    <div *ngIf="tickets.length === 0" class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <p>No tickets available.</p>
+    </div>
+  </div>
+</div>

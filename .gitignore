@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+dist/
+.angular/
+npm-debug.log
+yarn-error.log
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.db
+*.db-shm
+*.db-wal
+appsettings.Development.json
+appsettings.*.json
+
+# General
+.DS_Store
+Thumbs.db
