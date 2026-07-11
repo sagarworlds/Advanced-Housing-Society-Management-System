@@ -1,0 +1,149 @@
+<div class="sa-container">
+  <!-- Header -->
+  <header class="sa-header">
+    <div class="header-left">
+      <div class="logo-icon">
+        <mat-icon>admin_panel_settings</mat-icon>
+      </div>
+      <div>
+        <h1>Antigravity SaaS</h1>
+        <p class="subtitle">SuperAdmin Command Center</p>
+      </div>
+    </div>
+    <button mat-flat-button class="logout-btn" (click)="logout()">
+      <mat-icon>logout</mat-icon> Logout
+    </button>
+  </header>
+
+  <!-- KPI Section -->
+  <div class="kpi-grid">
+    <div class="kpi-card purple-gradient">
+      <div class="kpi-icon">
+        <mat-icon>domain</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h3>Total Societies</h3>
+        <p class="kpi-value">{{ totalSocieties }}</p>
+      </div>
+    </div>
+    
+    <div class="kpi-card green-gradient">
+      <div class="kpi-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h3>Active Societies</h3>
+        <p class="kpi-value">{{ activeSocieties }}</p>
+      </div>
+    </div>
+
+    <div class="kpi-card blue-gradient">
+      <div class="kpi-icon">
+        <mat-icon>monetization_on</mat-icon>
+      </div>
+      <div class="kpi-content">
+        <h3>Est. Monthly Revenue</h3>
+        <p class="kpi-value">${{ estimatedRevenue | number:'1.2-2' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace -->
+  <main class="sa-main">
+    <mat-card class="table-card glass-panel">
+      <mat-card-header class="table-header">
+        <mat-card-title>Registered Societies</mat-card-title>
+        <mat-card-subtitle>Manage client societies, toggle active status, and modify module subscriptions.</mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="loading-overlay" *ngIf="loading">
+        <div class="spinner"></div>
+      </div>
+
+      <div class="table-wrapper" *ngIf="!loading">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Society Name</th>
+              <th>Domain</th>
+              <th>Onboarded Date</th>
+              <th>Status</th>
+              <th>Subscribed Modules</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let society of societies" [class.editing]="editingSocietyId === society.id">
+              <td class="bold-text">{{ society.name }}</td>
+              <td><span class="domain-tag">{{ society.domain }}</span></td>
+              <td>{{ society.createdAt | date:'mediumDate' }}</td>
+              <td>
+                <span class="status-badge" [class.active]="society.isActive" [class.inactive]="!society.isActive">
+                  {{ society.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="module-tags-list">
+                  <span class="module-tag" *ngFor="let mod of society.selectedModuleIds">
+                    {{ mod }}
+                  </span>
+                  <span class="no-modules" *ngIf="!society.selectedModuleIds || society.selectedModuleIds.length === 0">
+                    No active subscriptions
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell">
+                  <button mat-icon-button class="action-btn" [class.active-btn]="!society.isActive" (click)="toggleStatus(society)" title="Toggle Status">
+                    <mat-icon>{{ society.isActive ? 'block' : 'check_circle' }}</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-btn edit-btn" (click)="startEditModules(society)" title="Edit Subscriptions">
+                    <mat-icon>settings_input_component</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="societies.length === 0">
+              <td colspan="6" class="empty-state">
+                <mat-icon class="empty-icon">domain_disabled</mat-icon>
+                <p>No registered societies found in the system.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-card>
+
+    <!-- Side/Drawer Panel for Editing Modules (inline) -->
+    <div class="edit-drawer glass-panel" *ngIf="editingSocietyId">
+      <div class="drawer-header">
+        <h3>Edit Subscription Modules</h3>
+        <button mat-icon-button (click)="cancelEditModules()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="drawer-body">
+        <p class="drawer-subtitle">Select modules to assign. Monthly revenue will update automatically upon saving.</p>
+        
+        <div class="modules-list">
+          <div class="module-item-card" *ngFor="let mod of modules" [class.selected]="isModuleSelected(mod.name)">
+            <mat-checkbox 
+              [checked]="isModuleSelected(mod.name)" 
+              (change)="toggleModuleSelection(mod.name, $event.checked)">
+              <span class="mod-title">{{ mod.description }}</span>
+            </mat-checkbox>
+            <div class="mod-details">
+              <span class="mod-price">${{ mod.monthlyPrice }}/mo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-actions">
+        <button mat-stroked-button class="cancel-btn" (click)="cancelEditModules()">Cancel</button>
+        <button mat-flat-button class="save-btn" (click)="saveModules()">Save Subscription</button>
+      </div>
+    </div>
+  </main>
+</div>

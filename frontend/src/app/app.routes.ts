@@ -11,11 +11,13 @@ import { Booking as FacilityBooking } from './features/facility/booking/booking'
 import { Admin as FacilityAdmin } from './features/facility/admin/admin';
 import { NoticeBoard } from './features/communication/notice-board/notice-board';
 import { Polling } from './features/communication/polling/polling';
+import { SuperAdminDashboard } from './features/superadmin/superadmin';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'onboard', component: Onboard },
+  { path: 'superadmin/dashboard', component: SuperAdminDashboard },
   { path: 'maintenance', component: Maintenance },
   { path: 'visitor/guard', component: Guard },
   { path: 'visitor/resident', component: Resident },
