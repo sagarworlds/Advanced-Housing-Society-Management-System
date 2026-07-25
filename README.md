@@ -1,5 +1,12 @@
 # Advanced Housing Society Management System
 
+[![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![Angular](https://img.shields.io/badge/Angular-20-DD0031?logo=angular&logoColor=white)](https://angular.io/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![C%23](https://img.shields.io/badge/C%23-12-239120?logo=csharp&logoColor=white)](https://learn.microsoft.com/en-us/dotnet/csharp/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A comprehensive multi-tenant SaaS application for managing modern housing societies with features for maintenance, billing, visitor management, and resident communication.
 
 ## 🎯 Features
@@ -15,15 +22,16 @@ A comprehensive multi-tenant SaaS application for managing modern housing societ
 
 | Layer | Technology |
 |-------|-----------|
-| **Backend** | C# ASP.NET Core (.NET 10), Entity Framework Core, SQLite |
-| **Frontend** | Angular 20 (PWA, Mobile-first responsive design) |
+| **Backend** | [C# ASP.NET Core](https://dotnet.microsoft.com/) (.NET 10), [Entity Framework Core](https://learn.microsoft.com/en-us/ef/), [SQLite](https://www.sqlite.org/) |
+| **Frontend** | [Angular](https://angular.io/) 20 (PWA, Mobile-first responsive design) |
+| **Language** | [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) (Backend), [TypeScript](https://www.typescriptlang.org/) (Frontend) |
 | **Architecture** | Multi-tenant SaaS with data isolation |
 
 ## 📋 Prerequisites
 
-- .NET 10 SDK
-- Node.js 18+ & npm
-- SQLite (bundled with .NET)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Node.js](https://nodejs.org/) 18+ & npm
+- [SQLite](https://www.sqlite.org/download.html) (bundled with .NET)
 
 ## 🚀 Getting Started
 
