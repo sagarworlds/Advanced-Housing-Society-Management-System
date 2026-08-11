@@ -68,12 +68,6 @@ The application will be available at `http://localhost:4200`
 └── docs/            # Documentation
 ```
 
-## 📖 Documentation
-
-- [API Documentation](./docs/API.md)
-- [Database Schema](./docs/DATABASE.md)
-- [User Guide](./docs/USER_GUIDE.md)
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:
@@ -87,12 +81,6 @@ Contributions are welcome! Please follow these steps:
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE) – see the LICENSE file for details.
-
-## 📞 Support & Contact
-
-- **Issues:** [GitHub Issues](../../issues)
-- **Email:** your-email@example.com
-- **Documentation:** [Wiki](../../wiki)
 
 ## 🎓 Authors
 
