@@ -1,11 +1,12 @@
 services:
-  # 1. Backend Web Service (ASP.NET Core API via Docker)
+  # Backend Web Service - ASP.NET Core API
   - type: web
     name: society-management-api
     runtime: docker
     plan: free
     rootDir: backend
     dockerfilePath: Dockerfile
+
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
@@ -16,16 +17,21 @@ services:
       - key: Jwt__Audience
         value: SocietyManagementApiUsers
 
-  # 2. Frontend Static Site (Angular PWA)
+  # Frontend Static Site - Angular 22
   - type: web
     name: society-management-ui
     runtime: static
+    plan: free
     rootDir: frontend
-    buildCommand: npm install && npm run build
+
+    buildCommand: npm ci && npm run build
+
     staticPublishPath: dist/society-management-app/browser
+
     envVars:
       - key: NODE_VERSION
-        value: "24"
+        value: "24.18.0"
+
     routes:
       - type: rewrite
         source: /*
