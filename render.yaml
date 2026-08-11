@@ -18,7 +18,9 @@ services:
         value: SocietyManagementApiUsers
 
   # Frontend Static Site (Angular PWA)
-  - type: static
+  services:
+  - type: web       # <--- Always use 'web' for static sites
+    runtime: static # <--- This defines it as a static site
     name: society-management-ui
     plan: free
     rootDir: frontend
