@@ -1,4 +1,5 @@
 services:
+  # 1. Backend Service
   - type: web
     name: society-management-api
     runtime: dotnet
@@ -16,10 +17,9 @@ services:
       - key: Jwt__Audience
         value: SocietyManagementApiUsers
 
-  # Frontend Static Site (Angular PWA)
-  services:
-  - type: web       # <--- Always use 'web' for static sites
-    runtime: static # <--- This defines it as a static site
+  # 2. Frontend Static Site (Angular PWA)
+  - type: web
+    runtime: static
     name: society-management-ui
     plan: free
     rootDir: frontend
