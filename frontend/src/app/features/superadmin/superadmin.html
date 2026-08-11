@@ -10,9 +10,14 @@
         <p class="subtitle">SuperAdmin Command Center</p>
       </div>
     </div>
-    <button mat-flat-button class="logout-btn" (click)="logout()">
-      <mat-icon>logout</mat-icon> Logout
-    </button>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <button mat-stroked-button class="download-btn" (click)="downloadDatabase()" style="color: #6366f1; border-color: rgba(99, 102, 241, 0.4);" title="Download SQLite Database Backup">
+        <mat-icon>cloud_download</mat-icon> Backup Database (.db)
+      </button>
+      <button mat-flat-button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </div>
   </header>
 
   <!-- KPI Section -->

@@ -177,6 +177,25 @@ export class SuperAdminDashboard implements OnInit {
     });
   }
 
+  downloadDatabase() {
+    this.saService.downloadDatabase().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'societymanagement.db';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.snackBar.open('Database backup downloaded successfully.', 'Close', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Failed to download database backup.', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
   logout() {
     localStorage.removeItem('jwt_token');
     this.router.navigate(['/login']);

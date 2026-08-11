@@ -160,4 +160,25 @@ public class TenantController : ControllerBase
 
         return Ok(modules);
     }
+
+    [HttpGet("database/download")]
+    [Authorize(Roles = "SuperAdmin")]
+    public IActionResult DownloadDatabase()
+    {
+        var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "societymanagement.db");
+        if (!System.IO.File.Exists(dbPath))
+        {
+            // Fallback check in AppDomain BaseDirectory
+            dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "societymanagement.db");
+        }
+
+        if (!System.IO.File.Exists(dbPath))
+        {
+            return NotFound("Database file not found on server.");
+        }
+
+        // Return copy as byte array to avoid file locking issues
+        byte[] fileBytes = System.IO.File.ReadAllBytes(dbPath);
+        return File(fileBytes, "application/x-sqlite3", "societymanagement.db");
+    }
 }

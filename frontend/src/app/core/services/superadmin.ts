@@ -41,4 +41,8 @@ export class SuperAdminService {
   getAvailableModules(): Observable<ModuleInfo[]> {
     return this.http.get<ModuleInfo[]>(`${this.apiUrl}/modules`);
   }
+
+  downloadDatabase(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/database/download`, { responseType: 'blob' });
+  }
 }
