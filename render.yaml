@@ -25,7 +25,7 @@ services:
     staticPublishPath: dist/society-management-app/browser
     envVars:
       - key: NODE_VERSION
-        value: 22.22.3
+        value: "24"
     routes:
       - type: rewrite
         source: /*
