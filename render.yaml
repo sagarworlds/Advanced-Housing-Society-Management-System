@@ -17,8 +17,9 @@ services:
         value: SocietyManagementApiUsers
 
   # 2. Frontend Static Site (Angular PWA)
-  - type: static
+  - type: web
     name: society-management-ui
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist/society-management-app/browser
