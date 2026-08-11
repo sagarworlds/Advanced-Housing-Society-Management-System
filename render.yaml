@@ -1,5 +1,5 @@
 services:
-  # Backend Web Service (ASP.NET Core API via Docker)
+  # 1. Backend Service
   - type: web
     name: society-management-api
     runtime: docker
@@ -16,8 +16,9 @@ services:
       - key: Jwt__Audience
         value: SocietyManagementApiUsers
 
-  # Frontend Static Site (Angular PWA)
-  - type: static
+  # 2. Frontend Static Site (Angular PWA)
+  - type: web
+    runtime: static
     name: society-management-ui
     plan: free
     rootDir: frontend
