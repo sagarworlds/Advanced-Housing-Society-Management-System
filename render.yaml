@@ -1,5 +1,4 @@
 services:
-  # Backend Web Service (ASP.NET Core API)
   - type: web
     name: society-management-api
     runtime: dotnet
