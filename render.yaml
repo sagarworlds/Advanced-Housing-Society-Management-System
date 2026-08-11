@@ -1,5 +1,5 @@
 services:
-  # 1. Backend Service
+  # 1. Backend Web Service (ASP.NET Core API via Docker)
   - type: web
     name: society-management-api
     runtime: docker
@@ -17,10 +17,8 @@ services:
         value: SocietyManagementApiUsers
 
   # 2. Frontend Static Site (Angular PWA)
-  - type: web
-    runtime: static
+  - type: static
     name: society-management-ui
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist/society-management-app/browser
